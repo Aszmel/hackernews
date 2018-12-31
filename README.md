@@ -1,7 +1,7 @@
 # HACKERNEWS
 
 This app is created from book
-by Robin Wieruch: [The Road to learn react]
+by Robin Wieruch: [The Road to learn react](https://www.robinwieruch.de/the-road-to-learn-react/)
 
 ### Usage
 
