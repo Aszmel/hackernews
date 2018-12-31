@@ -1,9 +1,9 @@
-#HACKERNEWS
+# HACKERNEWS
 
 This app is created from book
 by Robin Wieruch: [The Road to learn react]
 
-###Usage
+### Usage
 
 You can clone this repository with
 
@@ -20,4 +20,4 @@ npm install
 and start analyzing or working on this project
 to expand functionality
 
-###Happy Coding!
+### Happy Coding!
