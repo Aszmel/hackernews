@@ -5,12 +5,26 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: list
+      list,
+      searchTerm: ""
     };
   }
+
+  onDismiss = id => {
+    const updatedList = this.state.list.filter(item => item.objectID !== id);
+    this.setState({ list: updatedList });
+  };
+
+  onSearchChange = event => {
+    this.setState({ searchTerm: event.target.value });
+  };
+
   render() {
     return (
       <div className="App">
+        <form>
+          <input type="text" onChange={this.onSearchChange} />
+        </form>
         {this.state.list.map(item => (
           <div key={item.objectID}>
             <span>
@@ -19,6 +33,14 @@ class App extends Component {
             <span>{item.author}</span>
             <span>{item.num_comments}</span>
             <span>{item.points}</span>
+            <span>
+              <button
+                type="button"
+                onClick={() => this.onDismiss(item.objectID)}
+              >
+                Dismiss
+              </button>
+            </span>
           </div>
         ))}
       </div>
