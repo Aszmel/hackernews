@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import axios from "axios";
 
 const DEFAULT_QUERY = "MobX";
 const PATH_BASE = "https://hn.algolia.com/api/v1";
@@ -10,12 +11,14 @@ const DEFAULT_HPP = "100";
 const PARAM_HPP = "hitsPerPage=";
 
 class App extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
     this.state = {
       results: null,
       searchKey: "",
-      searchTerm: DEFAULT_QUERY
+      searchTerm: DEFAULT_QUERY,
+      error: null
     };
   }
 
@@ -47,12 +50,11 @@ class App extends Component {
   };
 
   fetchSearchTopStories = (searchTerm, page = 0) => {
-    fetch(
+    axios(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
     )
-      .then(response => response.json())
-      .then(result => this.setSearchTopStories(result))
-      .catch(error => error);
+      .then(result => this._isMounted && this.setSearchTopStories(result.data))
+      .catch(error => this._isMounted && this.setState({ error }));
   };
 
   onDismiss = id => {
@@ -74,13 +76,19 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     const { searchTerm } = this.state;
     this.setState({ searchKey: searchTerm });
     this.fetchSearchTopStories(searchTerm);
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   //***********MAIN RENDER *************/
   render() {
-    const { searchTerm, results, searchKey } = this.state;
+    const { searchTerm, results, searchKey, error } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
     const list =
@@ -89,6 +97,7 @@ class App extends Component {
     if (!results) {
       return null;
     }
+
     return (
       <div className="page">
         <h1 className="title">
@@ -103,7 +112,14 @@ class App extends Component {
             Search
           </Search>
         </div>
-        {results && <Table list={list} onDismiss={this.onDismiss} />}
+        {error ? (
+          <div className="interactions">
+            <p>Something went wrong!</p>
+          </div>
+        ) : (
+          <Table list={list} onDismiss={this.onDismiss} />
+        )}
+
         <div className="interactions">
           <Button
             onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
@@ -154,3 +170,5 @@ const Button = ({ onClick, className = "", children }) => (
 );
 
 export default App;
+
+export { Search, Table, Button };
