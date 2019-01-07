@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const DEFAULT_QUERY = "MobX";
 const PATH_BASE = "https://hn.algolia.com/api/v1";
@@ -168,6 +169,29 @@ const Button = ({ onClick, className = "", children }) => (
     {children}
   </button>
 );
+
+// Button.defaultProps = {
+//   className: '',
+//   };  <---------------then you can omit declaration of className=''
+
+Button.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  children: PropTypes.node.isRequired
+};
+
+Table.propTypes = {
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      objectID: PropTypes.string.isRequired,
+      author: PropTypes.string,
+      url: PropTypes.string,
+      num_comments: PropTypes.number,
+      points: PropTypes.number
+    })
+  ).isRequired,
+  onDismiss: PropTypes.func.isRequired
+};
 
 export default App;
 
