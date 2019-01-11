@@ -128,11 +128,12 @@ class App extends Component {
           {isLoading ? (
             <Loading />
           ) : (
-            <Button
+            <ButtonWithLoading
+              isLoading={isLoading}
               onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
             >
               More
-            </Button>
+            </ButtonWithLoading>
           )}
         </div>
       </div>
@@ -200,7 +201,12 @@ const Loading = () => (
   </div>
 );
 
-//-------------------------------------SOME OTHER STUFF____________****
+const withLoading = Component => ({ isLoading, ...rest }) =>
+  isLoading ? <Loading /> : <Component {...rest} />;
+
+const ButtonWithLoading = withLoading(Button);
+
+// *** Prop Types ***
 // Button.defaultProps = {
 //   className: '',
 //   };  <---------------then you can omit declaration of className=''
